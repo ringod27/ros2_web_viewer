@@ -1,0 +1,15 @@
+/**:
+  websocket_pointcloud_bridge:
+    ros__parameters:
+      # ——— Topic names (can be remapped at runtime) ———
+      pointcloud_topic: "/points_raw"
+      gps_topic: "/fix"
+
+      # ——— WebSocket connection settings (candidate edits these) ———
+      ws_ip: "127.0.0.1"
+      ws_port: 9090
+      ws_api_path: "/"
+
+      # ——— Misc ———
+      qos_depth: 10            # history depth for both subscriptions
+      send_raw_binary: false   # candidate decides how to serialise PointCloud2
