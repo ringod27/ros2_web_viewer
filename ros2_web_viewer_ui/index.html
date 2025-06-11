@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="/src/css/material-icons.css" media="all" rel="stylesheet" type="text/css">
+    <link href="/src/css/material.indigo-blue.min.css" rel="stylesheet" />
+    <link href="/src/css/index.css" media="all" rel="stylesheet" type="text/css">
+    <title>ROS web viewer</title>
+  </head>
+  <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header mdl-layout__header--transparent" style="background: #212121 !important;">
+      </header>
+      <div class="mdl-layout__drawer">
+        <nav id="topics-nav" class="mdl-navigation">
+            <div id="topics-nav-ros">
+               <ul class="mdl-list">                
+                <li class="mdl-list__item" style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="cbPointCloud">
+                    <input type="checkbox" id="cbPointCloud" class="mdl-checkbox__input topic-checkbox" 
+                           data-topic-type="pointcloud" data-topic-name="/sensing/lidar/hesai/pandar"> 
+                    <span class="mdl-checkbox__label" style="color: #ffffff !important">PointCloud</span>
+                  </label>
+                </li>
+                
+                <li class="mdl-list__item" style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="cbGNSS">
+                    <input type="checkbox" id="cbGNSS" class="mdl-checkbox__input topic-checkbox"
+                           data-topic-type="navsatfix" data-topic-name="/ublox_gps_node/fix">
+                    <span class="mdl-checkbox__label" style="color: #ffffff !important">GNSS</span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+            <!-- <button id="btn-pause-play"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" 
+                    style="background: rgb(165, 30, 30); margin: 0px 10px; display: none;">
+              Pause
+            </button> -->
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+        <div style="position: fixed; top: 70px; right: 0px; transform: translateX(-50%); z-index: 1000;">
+          <button id="btn-pause-play"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" 
+                  style="background: rgb(165, 30, 30); display: none;">
+            Pause
+          </button>
+        </div>
+        <div class="page-content">
+          <div class="grid">
+            <canvas id="viewer" style="position: absolute; height: 100%; width: 100%; display: block;"></canvas>
+          </div>
+        </div>
+        
+      </main>
+    </div>
+    <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button">
+      </button>
+    </div>
+    <script type="text/javascript" src="/src/js/material.min.js" defer></script>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
