@@ -32,23 +32,32 @@
                     <span class="mdl-checkbox__label" style="color: #ffffff !important">GNSS</span>
                   </label>
                 </li>
+
+                <li class="mdl-list__item" style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="cbObstacle">
+                    <input type="checkbox" id="cbObstacle" class="mdl-checkbox__input topic-checkbox"
+                           data-topic-type="obstacle" data-topic-name="/obstacle">
+                    <span class="mdl-checkbox__label" style="color: #ffffff !important">Obstacles</span>
+                  </label>
+                </li>
+
               </ul>
             </div>
-            <!-- <button id="btn-pause-play"
+            <button id="btn-pause-play"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" 
                     style="background: rgb(165, 30, 30); margin: 0px 10px; display: none;">
               Pause
-            </button> -->
+            </button>
         </nav>
       </div>
       <main class="mdl-layout__content">
-        <div style="position: fixed; top: 70px; right: 0px; transform: translateX(-50%); z-index: 1000;">
+        <!-- <div style="position: fixed; top: 70px; right: 0px; transform: translateX(-50%); z-index: 1000;">
           <button id="btn-pause-play"
                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" 
                   style="background: rgb(165, 30, 30); display: none;">
             Pause
           </button>
-        </div>
+        </div> -->
         <div class="page-content">
           <div class="grid">
             <canvas id="viewer" style="position: absolute; height: 100%; width: 100%; display: block;"></canvas>

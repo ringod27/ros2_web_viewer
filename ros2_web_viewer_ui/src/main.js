@@ -5,6 +5,7 @@ import { deleteSceneEntity } from './js/viewer/pointcloud.js';
 initViewer();
 
 document.getElementById("cbPointCloud").addEventListener("change", (e) => {
+  e.preventDefault();
   const msg = {
     action: e.target.checked ? "subscribe" : "unsubscribe",
     type: "pointcloud",
@@ -15,6 +16,7 @@ document.getElementById("cbPointCloud").addEventListener("change", (e) => {
 });
 
 document.getElementById("cbGNSS").addEventListener("change", (e) => {
+  e.preventDefault();
   const msg = {
     action: e.target.checked ? "subscribe" : "unsubscribe",
     type: "navsatfix",
@@ -22,6 +24,18 @@ document.getElementById("cbGNSS").addEventListener("change", (e) => {
   };
   if (!e.target.checked) deleteSceneEntity(msg.topic);
   sendMessageToSocket(msg);
+});
+
+document.getElementById("cbObstacle").addEventListener("change", (e) => {
+  e.preventDefault();
+  console.log("trigger");
+  // const msg = {
+  //   action: e.target.checked ? "subscribe" : "unsubscribe",
+  //   type: "obstacle",
+  //   topic: "/obstacle"
+  // };
+  // if (!e.target.checked) deleteSceneEntity(msg.topic);
+  // sendMessageToSocket(msg);
 });
 
 const pausePlayBtn = document.getElementById("btn-pause-play");
