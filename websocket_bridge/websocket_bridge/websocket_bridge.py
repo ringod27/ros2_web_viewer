@@ -12,8 +12,12 @@ ROS 2 node that
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
-
-from sensor_msgs.msg import PointCloud2, NavSatFix
+from std_msgs.msg import Header
+from sensor_msgs.msg import PointCloud2, NavSatFix, PointField
+from geometry_msgs.msg import PointStamped
+from tf2_ros import Buffer, TransformListener
+from tf2_geometry_msgs import do_transform_point
+from GNSSConverter import GNSSConverter
 
 import roslibpy
 
@@ -26,6 +30,10 @@ import tornado.web
 import tornado.ioloop
 import tornado.websocket
 import threading
+from pyproj import CRS, Transformer
+import numpy as np
+import struct
+
 
 class WebsocketBridgeNode(Node):
 
@@ -53,8 +61,13 @@ class WebsocketBridgeNode(Node):
         # qos = QoSProfile(depth=depth)
         self.qos_profile = QoSProfile(depth=depth)
 
+        # ── Initialise TF buffer and listener ────────────────────────────────
+        # TODO listen only when subscribe
+        self.tf_buffer = Buffer()
+        self.tf_listener = TransformListener(self.tf_buffer, self)
+
         # ── Initialise WebSocket connection (TODO) ─────────────────────────
-        self.ws_url = f"ws://{ws_ip}:{ws_port}{ws_api_path}"
+        # self.ws_url = f"ws://{ws_ip}:{ws_port}{ws_api_path}"
         # self.init_websocket()
         self.init_websocket(ws_ip, ws_port, ws_api_path)
 
@@ -73,6 +86,9 @@ class WebsocketBridgeNode(Node):
         #     f"Bridge started → {self.ws_url}\n"
         #     f" Subscribed to: {pc_topic} (PointCloud2), {gps_topic} (NavSatFix)"
         # )
+
+        # GNSSConverter will be created on first GPS fix:
+        self.gnss_converter = None
 
     # ======================================================================
     #                      WebSocket helper stubs
@@ -137,16 +153,64 @@ class WebsocketBridgeNode(Node):
         """Handle incoming PointCloud2."""
         # TODO: choose a sensible serialisation (e.g. convert to Base64)
         ros_msg_dict = ros2dict(msg)
+        ros_msg_dict["topic"] = "/sensing/lidar/hesai/pandar"
+        ros_msg_dict["type"] = "pointcloud"
 
         self.send_message('pointcloud', ros_msg_dict)
-        # self.send_message('pointcloud', "test subs")
-        # DEBUG log every N messages if desired
 
     def gps_callback(self, msg: NavSatFix):
         """Handle incoming NavSatFix."""
         # TODO:
-        ros_msg_dict = ros2dict(msg)
-        self.send_message('gps', ros_msg_dict)
+        if self.gnss_converter is None:
+            self.gnss_converter = GNSSConverter(
+                origin_lat=msg.latitude,
+                origin_lon=msg.longitude,
+                origin_alt=msg.altitude
+            )
+            self.get_logger().info(
+                f"GNSS origin set to: lat={msg.latitude}, lon={msg.longitude}, alt={msg.altitude}"
+            )
+
+        x, y, z = self.gnss_converter.to_local_enu(msg.latitude, msg.longitude, msg.altitude)
+
+        point_in_gnss = PointStamped()
+        point_in_gnss.header = msg.header
+        point_in_gnss.point.x = x
+        point_in_gnss.point.y = y
+        point_in_gnss.point.z = z
+
+        try:
+            # 2) Lookup transform from gnss_link to 3d_lidar_base_link
+            transform = self.tf_buffer.lookup_transform(
+                '3d_lidar',  # target frame
+                'gnss_link',           # source frame
+                rclpy.time.Time())
+            
+            # 3) Transform the Cartesian point to lidar frame
+            point_in_lidar = do_transform_point(point_in_gnss, transform)
+
+            # 4) Send transformed point as dict (or your preferred format)
+            payload = {
+                'header': {
+                    'stamp_sec': point_in_lidar.header.stamp.sec,
+                    'stamp_nanosec': point_in_lidar.header.stamp.nanosec,
+                    'frame_id': point_in_lidar.header.frame_id,
+                },
+                'point': {
+                    'x': point_in_lidar.point.x,
+                    'y': point_in_lidar.point.y,
+                    'z': point_in_lidar.point.z,
+                }
+            }
+
+            payload["topic"] = "/ublox_gps_node/fix"
+            payload["type"] = "navsatfix"
+
+            self.send_message('navsatfix', payload)
+
+        except Exception as e:
+            self.get_logger().warn(f"Failed to transform GPS point: {e}")
+            pass
 
     # ======================================================================
 
