@@ -26,7 +26,7 @@ mamba install ros-humble-rosbag2-storage-mcap
 
 - Follow these steps to build and launch the WebSocket bridge node:
 
-### 1. Go to websocket_bridge:
+### 1. Activate env and go to websocket_bridge:
 
 ```bash
 cd ~/websocket_bridge
