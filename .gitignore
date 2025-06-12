@@ -6,3 +6,10 @@ __pycache__/
 # Node modules
 **/node_modules/
 .DS_Store
+websocket_bridge/websocket_bridge.egg-info/dependency_links.txt
+websocket_bridge/websocket_bridge.egg-info/entry_points.txt
+websocket_bridge/websocket_bridge.egg-info/PKG-INFO
+websocket_bridge/websocket_bridge.egg-info/requires.txt
+websocket_bridge/websocket_bridge.egg-info/SOURCES.txt
+websocket_bridge/websocket_bridge.egg-info/top_level.txt
+websocket_bridge/websocket_bridge.egg-info/zip-safe
