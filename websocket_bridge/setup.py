@@ -16,7 +16,7 @@ setup(
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
         (os.path.join('share', package_name, 'launch'), glob('launch/*.py')),
     ],
-    install_requires=['setuptools', 'roslibpy'],
+    install_requires=['setuptools', 'roslibpy', 'pymap3d', 'tornado', 'pyproj'],
     zip_safe=True,
     maintainer='masierra892',
     maintainer_email='miguel.sierra@lomby.jp',

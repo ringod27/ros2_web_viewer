@@ -1,15 +1,17 @@
 import { initViewer } from './js/viewer/initViewer.js';
 import { sendMessageToSocket } from './js/socket/websocket.js';
 import { deleteSceneEntity } from './js/viewer/pointcloud.js';
+import { TOPIC_LIST } from './js/enum.js';
 
 initViewer();
 
 document.getElementById("cbPointCloud").addEventListener("change", (e) => {
   e.preventDefault();
+  const topic_name = TOPIC_LIST.get('POINTS');
   const msg = {
     action: e.target.checked ? "subscribe" : "unsubscribe",
     type: "pointcloud",
-    topic: "/sensing/lidar/hesai/pandar"
+    topic: topic_name
   };
   if (!e.target.checked) deleteSceneEntity(msg.topic);
   sendMessageToSocket(msg);
@@ -17,10 +19,11 @@ document.getElementById("cbPointCloud").addEventListener("change", (e) => {
 
 document.getElementById("cbGNSS").addEventListener("change", (e) => {
   e.preventDefault();
+  const topic_name = TOPIC_LIST.get('FIX');
   const msg = {
     action: e.target.checked ? "subscribe" : "unsubscribe",
     type: "navsatfix",
-    topic: "/ublox_gps_node/fix"
+    topic: topic_name
   };
   if (!e.target.checked) deleteSceneEntity(msg.topic);
   sendMessageToSocket(msg);
@@ -73,7 +76,7 @@ pausePlayBtn.addEventListener("click", () => {
   
   subscribeTopics.forEach((checkbox) => {
     const topicType = checkbox.dataset.topicType;
-    const topicName = checkbox.dataset.topicName;
+    const topicName = TOPIC_LIST.get(checkbox.dataset.topicName);
 
       const msg = {
         action: paused ? "subscribe" : "unsubscribe",
