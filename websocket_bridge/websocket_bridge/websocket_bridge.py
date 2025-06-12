@@ -17,12 +17,13 @@ from sensor_msgs.msg import PointCloud2, NavSatFix, PointField
 from geometry_msgs.msg import PointStamped
 from tf2_ros import Buffer, TransformListener
 from tf2_geometry_msgs import do_transform_point
-from GNSSConverter import GNSSConverter
+
+from websocket_bridge.GNSSConverter import GNSSConverter
 
 import roslibpy
 
-from serialization import ros2dict
-from websocket.handler import WSHandler, ws_manager
+from websocket_bridge.serialization import ros2dict
+from websocket_bridge.websocket.handler import WSHandler, ws_manager
 
 import asyncio
 import json
@@ -38,20 +39,20 @@ import struct
 class WebsocketBridgeNode(Node):
 
     def __init__(self):
-        super().__init__('websocket_pointcloud_bridge')
+        super().__init__('websocket_bridge', automatically_declare_parameters_from_overrides=True)
 
         # ── Declare parameters with defaults (also match YAML) ──────────────
-        self.declare_parameter('pointcloud_topic', '/sensing/lidar/hesai/pandar')
-        self.declare_parameter('gps_topic', '/ublox_gps_node/fix')
-        self.declare_parameter('ws_ip', '127.0.0.1')
-        self.declare_parameter('ws_port', 9090)
-        self.declare_parameter('ws_api_path', '/')
-        self.declare_parameter('qos_depth', 10)
-        self.declare_parameter('send_raw_binary', False)
+        # self.declare_parameter('pointcloud_topic', '/sensing/lidar/hesai/pandar')
+        # self.declare_parameter('gps_topic', '/ublox_gps_node/fix')
+        # self.declare_parameter('ws_ip', '127.0.0.1')
+        # self.declare_parameter('ws_port', 9090)
+        # self.declare_parameter('ws_api_path', '/')
+        # self.declare_parameter('qos_depth', 10)
+        # self.declare_parameter('send_raw_binary', False)
 
         # ── Read parameters ──────────────────────────────────────────────────
-        pc_topic        = self.get_parameter('pointcloud_topic').get_parameter_value().string_value
-        gps_topic       = self.get_parameter('gps_topic').get_parameter_value().string_value
+        self.pc_topic        = self.get_parameter('pointcloud_topic').get_parameter_value().string_value
+        self.gps_topic       = self.get_parameter('gps_topic').get_parameter_value().string_value
         ws_ip           = self.get_parameter('ws_ip').get_parameter_value().string_value
         ws_port         = self.get_parameter('ws_port').get_parameter_value().integer_value
         ws_api_path     = self.get_parameter('ws_api_path').get_parameter_value().string_value
@@ -153,7 +154,7 @@ class WebsocketBridgeNode(Node):
         """Handle incoming PointCloud2."""
         # TODO: choose a sensible serialisation (e.g. convert to Base64)
         ros_msg_dict = ros2dict(msg)
-        ros_msg_dict["topic"] = "/sensing/lidar/hesai/pandar"
+        ros_msg_dict["topic"] = self.pc_topic
         ros_msg_dict["type"] = "pointcloud"
 
         self.send_message('pointcloud', ros_msg_dict)
@@ -203,7 +204,7 @@ class WebsocketBridgeNode(Node):
                 }
             }
 
-            payload["topic"] = "/ublox_gps_node/fix"
+            payload["topic"] = self.gps_topic
             payload["type"] = "navsatfix"
 
             self.send_message('navsatfix', payload)

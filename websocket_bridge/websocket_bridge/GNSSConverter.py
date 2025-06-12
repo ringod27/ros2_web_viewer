@@ -8,7 +8,7 @@ class GNSSConverter:
 
     def to_local_enu(self, lat, lon, alt):
         """
-        Convert geodetic coordinates to ENU (local frame) using pymap3d.
+        Convert geodetic coordinates to ENU (local frame).
         """
         xEast, yNorth, zUp = pm.geodetic2enu(
             lat, lon, alt,

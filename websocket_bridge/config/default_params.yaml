@@ -1,9 +1,9 @@
 /**:
-  websocket_pointcloud_bridge:
+  websocket_bridge:
     ros__parameters:
       # ——— Topic names (can be remapped at runtime) ———
-      pointcloud_topic: "/points_raw"
-      gps_topic: "/fix"
+      pointcloud_topic: "/sensing/lidar/hesai/pandar"
+      gps_topic: "/ublox_gps_node/fix"
 
       # ——— WebSocket connection settings (candidate edits these) ———
       ws_ip: "127.0.0.1"

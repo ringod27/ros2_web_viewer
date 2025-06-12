@@ -1,7 +1,7 @@
 import array
 import base64
 import numpy as np
-import compression
+import websocket_bridge.compression as compression
 
 def ros2dict(msg):
     if type(msg) in (str, bool, int, float):
