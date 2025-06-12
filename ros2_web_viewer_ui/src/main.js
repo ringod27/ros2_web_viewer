@@ -28,7 +28,6 @@ document.getElementById("cbGNSS").addEventListener("change", (e) => {
 
 document.getElementById("cbObstacle").addEventListener("change", (e) => {
   e.preventDefault();
-  console.log("trigger");
   // const msg = {
   //   action: e.target.checked ? "subscribe" : "unsubscribe",
   //   type: "obstacle",
