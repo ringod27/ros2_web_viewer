@@ -5,6 +5,8 @@ import { TOPIC_LIST } from './js/enum.js';
 
 initViewer();
 
+
+// UI events
 document.getElementById("cbPointCloud").addEventListener("change", (e) => {
   e.preventDefault();
   const topic_name = TOPIC_LIST.get('POINTS');
@@ -66,10 +68,8 @@ function showPausePlayButton() {
 
 }
 
-// Attach event listeners
 topicCheckboxes.forEach(cb => cb.addEventListener("change", showPausePlayButton));
 
-// Example usage:
 let paused = false;
 pausePlayBtn.addEventListener("click", () => {
   const subscribeTopics = document.querySelectorAll('.topic-checkbox:checked');
@@ -91,6 +91,8 @@ pausePlayBtn.addEventListener("click", () => {
   paused = !paused;
   togglePausePlay(paused);
 });
+
+// // UI events
 
 
 

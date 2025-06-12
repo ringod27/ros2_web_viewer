@@ -8,6 +8,7 @@ const z_min_slider = document.getElementById('z-min-slider');
 const z_max_slider = document.getElementById('z-max-slider');
 const thresholdEnabled = document.getElementById('cbObstacle');
 
+// create scene entity or object when receiving new topic
 export function createSceneEntity(topic_name, topic_type) {
   if (!sceneEntities.has(topic_name) && topic_type === "pointcloud") {
     const geometry = new THREE.BufferGeometry();
@@ -70,6 +71,7 @@ export function deleteSceneEntity(topic_name) {
   }
 }
 
+// update point cloud on the scene when receiving the same topic
 function updatePointcloud2(object, msg) {
   const bounds = msg._data_uint16.bounds;
   const data = parsebase64(msg._data_uint16.points);
@@ -122,6 +124,7 @@ function updatePointcloud2(object, msg) {
   object.geometry.computeBoundingSphere();
 }
 
+// create rectangular prism as marker
 function createWireframeBoxMarker(width, height, depth, borderColor = 0xff0000, fillColor = 0x00ff00, opacity = 0.2) {
   const geometry = new THREE.BoxGeometry(width, height, depth);
 

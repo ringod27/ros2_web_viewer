@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export let renderer, camera, controls, scene;
 
+// Initialize scene an renderer
 export function initViewer(canvasId = 'viewer') {
   const canvas = document.getElementById(canvasId);
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas });

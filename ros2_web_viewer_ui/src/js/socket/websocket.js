@@ -21,6 +21,7 @@ function connectWebSocket(url) {
     }
   };
 
+  // if web socket closed or disconnected, try reconnect every 3 seconds.
   socket.onclose = () => {
       console.warn("WebSocket closed. Reconnecting in", reconnectInterval / 1000, "s");
       setTimeout(() => connectWebSocket(url), reconnectInterval);

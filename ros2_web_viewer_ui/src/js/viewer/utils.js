@@ -1,4 +1,3 @@
-// src/viewer/utils.js
 export function parsebase64(base64) {
   const binary = atob(base64);
   const len = binary.length;
