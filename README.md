@@ -14,7 +14,7 @@
   - [ROS 2 Humble](https://docs.ros.org/en/humble/index.html)
   - [RoboStack (alternative)](https://robostack.github.io/GettingStarted.html)
 
-### 2. Activate the ROS environment
+### 2. If using RoboStack: Activate the ROS environment
 
 - Activate your ROS 2 or RoboStack environment, then install the MCAP storage plugin:
 
