@@ -79,6 +79,11 @@ npm run dev
 - /ublox_gps_node/fix→ GNSS data (RTK)
 - /tf → Static transform tree for spatial alignment
 
+### 3. play ros2 bag file to see visualization:
+```bash
+ros2 bag play output_bag_0.mcap -l
+```
+
 
 
 
